@@ -1,0 +1,10 @@
+export { default as MainCategory } from './MainCategory';
+export { default as Sub1Category } from './Sub1Category';
+export { default as Stores } from './Stores';
+export { default as Dashboard } from './Dashboard';
+export { default as NotFound } from './NotFound';
+export { default as Ads } from './Ads';
+export { default as Traders} from './Traders';
+export { default as Customers} from './Customers';
+export { default as Marketers} from './Marketers';
+export { default as DeliveryAgents} from './DeliveryAgents';
