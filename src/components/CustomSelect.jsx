@@ -1,17 +1,22 @@
 import { Select } from 'antd';
 
-const CustomSelect = ({ placeholder, onKeyDown, loading=false, options, className, dropdownClassName, onChange, ...props}) => {
+const CustomSelect = ({ mode,placeholder, onKeyDown, loading=false, options, className='w-48', dropdownClassName, onChange, ...props}) => {
         return(
                 <Select
+                // showSearch
+                // filterOption={(input, option) =>
+                // (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                // }
                 loading={loading}
                 placeholder={placeholder}
-                className={`w-48 ${className}`} 
+                className={className}
                 popupClassName={`text-md ${dropdownClassName}`}
                 onChange={onChange}
                 onKeyDown={onKeyDown}
                 allowClear
                 options={options}
                 {...props}
+                mode={mode}
                 />
         )
 }

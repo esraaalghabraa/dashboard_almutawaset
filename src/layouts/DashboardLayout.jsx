@@ -30,7 +30,7 @@ const DashboardLayout = () => {
                     },
                     Select: {
                         optionLineHeight: '2',
-                        optionFontSize: 16,
+                        optionFontSize: 12,
                     },
                 },
             }}

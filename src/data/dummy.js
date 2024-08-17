@@ -93,7 +93,7 @@ export const statusOptions = [
 ];
 
 
-export const statusOptionsAds = [
+export const statusOptionsAdsAndStores = [
   { label: 'مفعل', value: 0 },
   { label: 'غير مفعل', value: 2 },
   { label: 'محذوف من قبل التاجر', value:3 },

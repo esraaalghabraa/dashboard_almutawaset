@@ -108,7 +108,10 @@ const TradersColumns = [
         align: 'center',
         render: (text, record) => (
             <div className="flex items-center justify-center gap-4 ">
-            <CustomSwitch active = {record.active} onChange={() =>
+            <CustomSwitch
+            colorPrimary={record.active ? 'green' : 'red'}
+            active = {record.active} 
+            onChange={() =>
                 showDialogConfirm({
                 title: 'تأكيد تغيير حالة القسم',
                 onOk: () => handleStatusChange(record.id, record.active),

@@ -9,12 +9,13 @@ export const fetchAds = async (params) => {
     };
     
 export const updateAdStatus = async (id, active) => {
+    console.log(active)
     await ApiService.post({
         subUrl: '/activeOrUnactiveProduct',
 
         data: {
             'id':id,
-            'active':active === 2 || active === 4  ? 0 : 1
+            'active':active
         },
     });  
 };

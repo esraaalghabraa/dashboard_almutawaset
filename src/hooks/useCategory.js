@@ -132,7 +132,10 @@ const MainCategoriesColumns =   useMemo(() => [
                 onOk: () => handleDelete(record.id),
                 content: 'هل أنت متأكد أنك تريد حذف هذا العنصر؟',
             })} />
-            <CustomSwitch active = {record.active} onChange={() =>
+            <CustomSwitch
+            colorPrimary={record.active ? 'green' : 'red'}
+            active = {record.active} 
+            onChange={() =>
                 showDialogConfirm({
                 title: 'تأكيد تغيير حالة القسم',
                 onOk: () => handleStatusChange(record.id, record.active),

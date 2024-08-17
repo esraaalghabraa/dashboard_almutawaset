@@ -1,7 +1,7 @@
 import React from 'react'
 import useAd from '../hooks/useAd'
 import { CustomSelect, DataPagination, DataTable, Header } from '../components';
-import { statusOptions, statusOptionsAds } from '../data/dummy';
+import { statusOptions, statusOptionsAdsAndStores } from '../data/dummy';
 import { theme } from 'antd';
 import { MinusCircleTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
@@ -23,7 +23,6 @@ const Ads = () => {
     loadingSelectSub2Category,
     expandedColumns
   } = useAd();
-  const { token } = theme.useToken();
   return (
     <div>
         <Header
@@ -37,7 +36,7 @@ const Ads = () => {
           >
           <CustomSelect placeholder="الحالة" 
           onChange={(value) => handleFilterChange('active', value)}
-          options={statusOptionsAds} />
+          options={statusOptionsAdsAndStores} />
           <CustomSelect placeholder="أقسام المستوى الأول" 
           onChange={(value) => handleFilterChange('category1_id', value)}
           loading={loadingSelectMainCategory}

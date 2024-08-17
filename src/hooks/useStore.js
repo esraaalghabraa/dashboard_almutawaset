@@ -1,24 +1,20 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Avatar, notification, Tag } from 'antd';
 import { CustomSwitch, DeleteButton, EditButton, showDialogConfirm } from '../components';
-import { fetchAds, updateAdStatus } from '../stores/storeAd';
 import { fetchCategoriesAsPairs } from '../stores/storeCategory';
 import { fetchSub1CategoriesAsPairs } from '../stores/storeSub1Category';
-import { fetchSub2CategoriesAsPairs } from '../stores/storeSub2Category';
+import { fetchStores, updateStoreStatus } from '../stores/storeStore';
 
-const useAd = () => {
+const useStore = () => {
 
 const [data, setData] = useState([]);
 const [loading, setLoading] = useState(false);
 const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
-const [filters, setFilters] = useState({ name: '', active: '' , category3_id: undefined});
+const [filters, setFilters] = useState({ name: '', active: '' , category2_ids: []});
 const [mainCategoryId, setMainCategoryId]= useState(null);
-const [sub1CategoryId, setSub1CategoryId]= useState(null);
 const [sub1Categories, setSub1Categories] = useState([]);
-const [sub2Categories, setSub2Categories] = useState([]);
 const [loadingSelectMainCategory, setLoadingSelectMainCategory] = useState(true);
 const [loadingSelectSub1Category, setLoadingSelectSub1Category] = useState(false);
-const [loadingSelectSub2Category, setLoadingSelectSub2Category] = useState(false);
 const [categories, setCategories] = useState([]);
 
 useEffect(() => {
@@ -73,39 +69,10 @@ useEffect(() => {
 }, [mainCategoryId]);
 
 
-useEffect(() => {
-    // Check if filters.category1_id is defined (not undefined or null)
-    if (sub1CategoryId) {
-        setLoadingSelectSub2Category(true);
-        const loadCategories = async () => {
-            try {
-                const result = await fetchSub2CategoriesAsPairs(sub1CategoryId);
-                const sub2CategoriesData = result.map((option) => ({
-                    value: option.id,
-                    label: option.name,
-                }));
-                setSub2Categories(sub2CategoriesData);
-            } catch (error) {
-                notification.error({
-                    message: 'Error',
-                    description: error.message,
-                });
-            } finally {
-                setLoadingSelectSub2Category(false); // End loading state
-            }
-        };
-
-        loadCategories();
-    } else {
-        // If category1_id is undefined, optionally clear sub1Categories
-        setSub2Categories([]);
-    }
-}, [sub1CategoryId]);
-
 const fetchData = useCallback(async (params = {}) => {
     setLoading(true);
     try {
-    const result = await fetchAds({ ...params, state: 2, ...filters });
+    const result = await fetchStores({ ...params, state: 2, ...filters });
     setData(result.data);
     setPagination(prev => ({ ...prev, total: result.total }));
     } catch (error) {
@@ -127,27 +94,38 @@ const handleFilterChange = (key,value) => {
         setMainCategoryId(value)
     }
     else{
-        if(key === 'category2_id'){
-            setSub1CategoryId(value)
-        }
-        else{
         setFilters(prev => ({ ...prev, [key]: value }));
-        fetchData({ page: 1, pageSize: pagination.pageSize });}
+        fetchData({ page: 1, pageSize: pagination.pageSize });
     }
-
 };
 
 
 const expandedColumns = useMemo(() => [
     {
-        title: "تصنيف المستوى الثالث",
-        dataIndex: "category3",
-        render: (category3) => category3?.name || 'N/A',
+        title: "اسم التاجر",
+        dataIndex: "trader",
+        render: (trader) => trader?.name || 'N/A',
         align: 'center',
     },
     {
-        title: "السعر الخاص",
-        dataIndex: "special_price",
+        title: "تصنيف المستوى الأول",
+        dataIndex: "category1",
+        render: (trader) => trader?.name || 'N/A',
+        align: 'center',
+    },
+    {
+        title: "تصنيفات المستوى الثاني",
+        dataIndex: "category2s",
+        render: (category2s) => 
+            category2s?.length > 0 ? (
+                <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                    {category2s.map((category2, index) => (
+                        <li key={category2.name} style={{ marginBottom: '5px' }}>
+                            {category2.name}
+                        </li>
+                    ))}
+                </ul>
+            ) : 'N/A',
         align: 'center',
     },
     {
@@ -155,16 +133,10 @@ const expandedColumns = useMemo(() => [
         dataIndex: "description",
         align: 'center',
     },
-    {
-        title: "المتجر",
-        dataIndex: "store",
-        render: (store) => store?.name || 'N/A',
-        align: 'center',
-    },
 ], []);
 
-const AdsColumns =   useMemo(() => [
-    {
+const StoresColumns =   useMemo(() => [
+        {
         title:"الصورة",
         dataIndex: "image_url",
         render: (text)=>{
@@ -183,13 +155,23 @@ const AdsColumns =   useMemo(() => [
         title: "الاسم",
         dataIndex: "name",
         align:'center',
-    },
-    {
-        title: "السعر",
-        dataIndex: "price",
+        },
+        {
+        title: "رقم الهاتف",
+        dataIndex: "phone",
         align: 'center',
-    },
-    {
+        },
+        {
+        title: "المدينة",
+        dataIndex: "city",
+        align: 'center',
+        },
+        {
+        title: "السوق",
+        dataIndex: "market",
+        align: 'center',
+        },
+        {
         title: 'الحالة',
         dataIndex: 'active',
         key: 'active',
@@ -209,8 +191,8 @@ const AdsColumns =   useMemo(() => [
             { text: 'غير مفعل من قبل التاجر', value: 1 },
             { text: 'محذوف من قبل التاجر', value: 3 },
         ],
-    },
-    {
+        },
+        {
         title: "العمليات",
         dataIndex: "actions",
         align: 'center',
@@ -229,7 +211,7 @@ const AdsColumns =   useMemo(() => [
                 }/>
             </div>
         )
-    }
+        }
 ], []);
 
 
@@ -250,9 +232,10 @@ const onPageChange = useCallback((page, pageSize) => {
 }, []);
 const handleStatusChange = async (id, active) => {
     try {
-    const activeAd = active === 2 || active === 4  ? 1 : 0
-    await updateAdStatus(id, activeAd);
-        notification.success({
+    const activeStore = active === 2 || active === 4  ? 1 : 0
+    await updateStoreStatus(id, activeStore);
+    fetchData({ page: pagination.current, pageSize: pagination.pageSize });
+    notification.success({
         message: 'Success',
         description: 'Category status updated successfully.',
     });
@@ -272,17 +255,15 @@ return {
     onPageChange,
     handleStatusChange,
     handleFilterChange,
-    AdsColumns,
+    StoresColumns,
     sub1Categories,
-    sub2Categories,
     categories,
     mainCategoryId,
     setMainCategoryId,
     loadingSelectMainCategory,
     loadingSelectSub1Category,
-    loadingSelectSub2Category,
     expandedColumns
 };
 }
 
-export default useAd
+export default useStore
