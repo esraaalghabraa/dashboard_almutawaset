@@ -1,10 +1,10 @@
 import React from 'react'
 import useStore from '../hooks/useStore'
-import { CustomSelect, DataPagination, DataTable, Header } from '../components';
-import { statusOptionsAdsAndStores } from '../data/dummy';
+import { CustomSelect, DataPagination, DataTable, GeneralModal, Header } from '../components';
+import { statusOptionsAdsAndStores, statusOptionsOrders } from '../data/dummy';
 import { MinusCircleTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
-const Stores = () => {
+const Stores = ({isStoreRequest}) => {
   const {
     data,
     loading,
@@ -20,8 +20,9 @@ const Stores = () => {
     setMainCategoryId,
     loadingSelectMainCategory,
     loadingSelectSub1Category,
-    expandedColumns
-  } = useStore();
+    expandedColumns,
+    handleCancelRejectModel,
+  } = useStore(isStoreRequest);
 
   return (
     <div>
@@ -35,8 +36,8 @@ const Stores = () => {
           ]}
           >
           <CustomSelect placeholder="الحالة" 
-          onChange={(value) => handleFilterChange('active', value)}
-          options={statusOptionsAdsAndStores} />
+          onChange={(value) => handleFilterChange(isStoreRequest < 2 ? 'state' : 'active', value)}
+          options={isStoreRequest < 2 ? statusOptionsOrders : statusOptionsAdsAndStores} />
           <CustomSelect placeholder="أقسام المستوى الأول" 
           onChange={(value) => handleFilterChange('category1_id', value)}
           loading={loadingSelectMainCategory}
@@ -47,7 +48,7 @@ const Stores = () => {
           options={sub1Categories} 
           mode="multiple"
           maxTagCount={0}
-      />
+          />
       </Header>
       <div className='m-4'>
         <DataTable

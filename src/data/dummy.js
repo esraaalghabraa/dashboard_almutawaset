@@ -4,6 +4,7 @@ import { RiAdvertisementLine } from "react-icons/ri";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { LuLayoutDashboard } from "react-icons/lu";
+import { BarChartOutlined} from "@ant-design/icons";
 
 export const links = [
   {
@@ -63,7 +64,7 @@ export const links = [
   },
   {
     title: 'الطلبات',
-    icon: <HiOutlineClipboardDocumentList/>,
+    icon: <HiOutlineClipboardDocumentList />,
     children:[
       {
         path:'orders-creating-stores',
@@ -82,7 +83,7 @@ export const links = [
   {
     path:'levels-marketers',
     title: 'مستويات المسوقين',
-    icon: <HiOutlineClipboardDocumentList/>,
+    icon: <BarChartOutlined />,
   }
 ]
 
@@ -98,4 +99,9 @@ export const statusOptionsAdsAndStores = [
   { label: 'غير مفعل', value: 2 },
   { label: 'محذوف من قبل التاجر', value:3 },
   { label: 'غير مفعل من قبل التاجر', value: 1 },
+];
+
+export const statusOptionsOrders = [
+  { label: 'قيد الانتظار', value: 0 },
+  { label: 'مرفوض', value: 1 },
 ];

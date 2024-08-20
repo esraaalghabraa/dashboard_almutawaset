@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ExclamationCircleFilled } from '@ant-design/icons';
-import { Modal } from 'antd';
+import { Input, Modal } from 'antd';
 const { confirm } = Modal;
 export const showDialogConfirm = ({title='تأكيد الحذف؟',onOk,content}) => {
 confirm({
@@ -14,4 +14,3 @@ confirm({
     onOk:onOk
 });
 };
-

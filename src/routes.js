@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/stores",
-        element: <Stores />,
+        element: <Stores isStoreRequest={2}/>,
       },
       {
         path: "/main-category",
@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/orders-creating-stores",
-        element: <Sub1Category />,
+        element: <Stores isStoreRequest={0}/>,
       },
       {
         path: "/orders-updating-stores",

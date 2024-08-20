@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useStateContext } from '../../context/ContextProvider';
 import CustomButton from '../CustomButton';
 
@@ -8,12 +8,14 @@ import ApiService from '../../data/api_service';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
+    const [loading, setLoading] = useState(false);
     const passwordRef = useRef();
     const phoneRef = useRef();
     const {setUser, setToken} = useStateContext();
 
     const onFinish = async (values) => {
         try{
+          setLoading(true)
           const result = await ApiService.post({
             subUrl: '/login',
             needToken: false,
@@ -28,6 +30,7 @@ const Login = () => {
             console.log(response.data.message);
           }
         }
+        setLoading(false)
     }
 
   return (
@@ -92,7 +95,7 @@ const Login = () => {
       </Form.Item>
 
       <Form.Item>
-      <CustomButton block={true} htmlType='submit' text="تسجيل الدخول" type="primary"
+      <CustomButton loading={loading} block={true} htmlType='submit' text="تسجيل الدخول" type="primary"
       />
       </Form.Item>
     </Form>

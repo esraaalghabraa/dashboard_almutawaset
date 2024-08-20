@@ -3,12 +3,12 @@ import { message } from 'antd';
 
 const ApiService = {
     get: async ({
-        baseURL = 'http://localhost:8000/web',
+        baseURL = 'https://almutawaset.microtechdev.com/web',
         needToken = true,
         params = {},
         subUrl,
         headers = {},
-        delay = 3000, // Add a delay parameter (default is 0, no delay)
+        delay = 0, // Add a delay parameter (default is 0, no delay)
     }) => {
         // Create a function that returns a promise that resolves after the specified delay
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -33,7 +33,7 @@ const ApiService = {
     },
     
     post: async ({ 
-        baseURL = 'http://localhost:8000/web',
+        baseURL = 'https://almutawaset.microtechdev.com/web',
         needToken = true,
         subUrl,
         headers = {},

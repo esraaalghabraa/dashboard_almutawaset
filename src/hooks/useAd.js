@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Avatar, notification, Tag } from 'antd';
-import { CustomSwitch, DeleteButton, EditButton, showDialogConfirm } from '../components';
-import { fetchAds, updateAdStatus } from '../stores/storeAd';
+import { CustomSwitch, showDialogConfirm } from '../components';
+import { fetchAds, fetchStoresAsPairs, updateAdStatus } from '../stores/storeAd';
 import { fetchCategoriesAsPairs } from '../stores/storeCategory';
 import { fetchSub1CategoriesAsPairs } from '../stores/storeSub1Category';
 import { fetchSub2CategoriesAsPairs } from '../stores/storeSub2Category';
@@ -11,20 +11,26 @@ const useAd = () => {
 const [data, setData] = useState([]);
 const [loading, setLoading] = useState(false);
 const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
-const [filters, setFilters] = useState({ name: '', active: '' , category3_id: undefined});
+const [filters, setFilters] = useState({ name: '', active: '' , category2_ids: undefined});
 const [mainCategoryId, setMainCategoryId]= useState(null);
 const [sub1CategoryId, setSub1CategoryId]= useState(null);
+const [sub1CategoryIds, setsub1CategoryIds]= useState({ category2_ids: []});
+
+const [stores, setStores] = useState([]);
+const [categories, setCategories] = useState([]);
 const [sub1Categories, setSub1Categories] = useState([]);
 const [sub2Categories, setSub2Categories] = useState([]);
+
 const [loadingSelectMainCategory, setLoadingSelectMainCategory] = useState(true);
 const [loadingSelectSub1Category, setLoadingSelectSub1Category] = useState(false);
 const [loadingSelectSub2Category, setLoadingSelectSub2Category] = useState(false);
-const [categories, setCategories] = useState([]);
+const [loadingSelectStores, setLoadingSelectStores] = useState(false);
 
 useEffect(() => {
     const loadCategories = async () => {
         try {
             const result = await fetchCategoriesAsPairs();
+            console.log(result)
             const categoriesData = result.map((option)=>({
                 label:option.name,
                 value:option.id
@@ -102,6 +108,34 @@ useEffect(() => {
     }
 }, [sub1CategoryId]);
 
+
+useEffect(() => {
+    if (sub1CategoryIds.category2_ids.length > 0) {
+        setLoadingSelectStores(true);
+        const loadStores = async () => {
+            try {
+                const result = await fetchStoresAsPairs({ ...sub1CategoryIds });
+                const storesData = result.map((option) => ({
+                    value: option.id,
+                    label: option.name,
+                }));
+                setStores(storesData);
+            } catch (error) {
+                notification.error({
+                    message: 'Error',
+                    description: error.message,
+                });
+            } finally {
+                setLoadingSelectStores(false); // End loading state
+            }
+        };
+        loadStores();
+    } else {
+        // If category1_id is undefined, optionally clear sub1Categories
+        setStores([]);
+    }
+}, [sub1CategoryIds.category2_ids]);
+
 const fetchData = useCallback(async (params = {}) => {
     setLoading(true);
     try {
@@ -122,19 +156,17 @@ useEffect(() => {
     fetchData({ page: pagination.current, Records_Number: pagination.pageSize });
 }, [fetchData, pagination.current, pagination.pageSize]);
 
-const handleFilterChange = (key,value) => {
-    if(key === 'category1_id'){
-        setMainCategoryId(value)
-    }
-    else{
-        if(key === 'category2_id'){
-            setSub1CategoryId(value)
-        }
-        else{
+const handleFilterChange = (key, value) => {
+    if (key === 'category1_id') {
+        setMainCategoryId(value);
+    } else if (key === 'category2_id') {
+        setSub1CategoryId(value);
+    } else if (key === 'category2_ids') {
+        setsub1CategoryIds(prev => ({ ...prev, [key]: value }));
+    } else {
         setFilters(prev => ({ ...prev, [key]: value }));
-        fetchData({ page: 1, pageSize: pagination.pageSize });}
+        fetchData({ page: 1, pageSize: pagination.pageSize });
     }
-
 };
 
 
@@ -275,13 +307,16 @@ return {
     AdsColumns,
     sub1Categories,
     sub2Categories,
+    stores,
     categories,
     mainCategoryId,
     setMainCategoryId,
     loadingSelectMainCategory,
     loadingSelectSub1Category,
     loadingSelectSub2Category,
-    expandedColumns
+    loadingSelectStores,
+    expandedColumns,
+    sub1CategoryIds
 };
 }
 

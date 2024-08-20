@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useAd from '../hooks/useAd'
 import { CustomSelect, DataPagination, DataTable, Header } from '../components';
-import { statusOptions, statusOptionsAdsAndStores } from '../data/dummy';
-import { theme } from 'antd';
+import { statusOptionsAdsAndStores } from '../data/dummy';
 import { MinusCircleTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
 const Ads = () => {
@@ -21,8 +20,13 @@ const Ads = () => {
     loadingSelectMainCategory,
     loadingSelectSub1Category,
     loadingSelectSub2Category,
-    expandedColumns
+    expandedColumns,
+    stores,
+    loadingSelectStores
   } = useAd();
+
+  const [showFilterOptions, setShowFilterOptions] = useState(0);
+
   return (
     <div>
         <Header
@@ -37,10 +41,17 @@ const Ads = () => {
           <CustomSelect placeholder="الحالة" 
           onChange={(value) => handleFilterChange('active', value)}
           options={statusOptionsAdsAndStores} />
-          <CustomSelect placeholder="أقسام المستوى الأول" 
+          <CustomSelect placeholder="فلترة الإعلانات حسب ..." 
+          onChange={(value) => setShowFilterOptions(value)}
+          options={[
+            { label: 'تصنيف المستوى الثالث', value: 1 },
+            { label: 'المتجر', value: 2 },
+          ]} />
+          {showFilterOptions !== 0 && <CustomSelect placeholder="أقسام المستوى الأول" 
           onChange={(value) => handleFilterChange('category1_id', value)}
           loading={loadingSelectMainCategory}
-          options={categories} />
+          options={categories} />}
+          {showFilterOptions === 1 && <>
           <CustomSelect placeholder="أقسام المستوى الثاني" 
           onChange={(value) => handleFilterChange('category2_id', value)}
           loading={loadingSelectSub1Category}
@@ -49,6 +60,21 @@ const Ads = () => {
           onChange={(value) => handleFilterChange('category3_id', value)}
           loading={loadingSelectSub2Category  }
           options={sub2Categories} />
+          </>}
+          {showFilterOptions ===2 && 
+          <>
+          <CustomSelect placeholder="أقسام المستوى الثاني" 
+          onChange={(value) => handleFilterChange('category2_ids', value)}
+          loading={loadingSelectSub1Category}
+          options={sub1Categories} 
+          mode="multiple"
+          maxTagCount={0}
+          />
+          <CustomSelect placeholder="المتاجر" 
+          onChange={(value) => handleFilterChange('store_id', value)}
+          loading={ loadingSelectStores }
+          options={ stores } />
+          </>}
       </Header>
       <div className='m-4'>
         <DataTable

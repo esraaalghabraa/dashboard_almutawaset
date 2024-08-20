@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const axiosClient = axios.create();
 
@@ -17,8 +19,9 @@ axiosClient.interceptors.response.use(
     async (error)=>{
         try{
             const {response} = error;
-            if (response.status === 401){
+            if (response.status === 401){   
                 localStorage.removeItem('ACCESS_TOKEN')
+                window.location.href = "/auth/login";
             }
         }catch (err){
             console.error(err);

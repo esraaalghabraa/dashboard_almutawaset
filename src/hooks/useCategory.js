@@ -26,7 +26,7 @@ const formFieldsMainCategories = [
       type: 'text',
       rules: [{ required: false }],
     }
-  ];
+    ];
 
 const fetchData = useCallback(async (params = {}) => {
     setLoading(true);
@@ -35,10 +35,10 @@ const fetchData = useCallback(async (params = {}) => {
     setData(result.data);
     setPagination(prev => ({ ...prev, total: result.total }));
     } catch (error) {
-        notification.error({
-            message: 'Error',
-            description: error.message,
-        });   
+        // notification.error({
+        //     message: 'Error',
+        //     description: error.message,
+        // });   
     } finally {
     setLoading(false);
     }
@@ -64,15 +64,15 @@ const handleDelete = async (id) => {
     try {
     await deleteCategory(id);
     fetchData({ page: pagination.current, pageSize: pagination.pageSize });
-    notification.success({
-        message: 'Success',
-        description: 'Category deleted successfully.',
-    });
+    // notification.success({
+    //     message: 'Success',
+    //     description: 'Category deleted successfully.',
+    // });
     } catch (error) {
-    notification.error({
-        message: 'Error',
-        description: error.message,
-    });
+    // notification.error({
+    //     message: 'Error',
+    //     description: error.message,
+    // });
     } finally {
     setConfirmLoading(false);
     }
@@ -151,15 +151,15 @@ const handleStatusChange = async (id, active) => {
     try {
     await updateCategoryStatus(id, !active);
     fetchData({ page: pagination.current, pageSize: pagination.pageSize });
-    notification.success({
-        message: 'Success',
-        description: 'Category status updated successfully.',
-    });
+    // notification.success({
+    //     message: 'Success',
+    //     description: 'Category status updated successfully.',
+    // });
     } catch (error) {
-    notification.error({
-        message: 'Error',
-        description: error.message,
-    });
+    // notification.error({
+    //     message: 'Error',
+    //     description: error.message,
+    // });
     }
 };
 
@@ -168,15 +168,15 @@ const handleCreateOrUpdate = useCallback(async (formData) => {
     try {
     await createOrUpdateCategory(formData, !!selectedItem);
     fetchData({ page: pagination.current, Records_Number: pagination.pageSize });
-    notification.success({
-        message: 'Success',
-        description: 'Category status created successfully.',
-    });
+    // notification.success({
+    //     message: 'Success',
+    //     description: 'Category status created successfully.',
+    // });
     } catch (error) {
-        notification.error({
-            message: 'Error',
-            description: error.message,
-        });
+        // notification.error({
+        //     message: 'Error',
+        //     description: error.message,
+        // });
     } finally {
     setLoading(false);
     setModalVisible(false);

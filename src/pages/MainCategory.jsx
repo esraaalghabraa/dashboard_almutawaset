@@ -43,6 +43,7 @@ const MainCategory = () => {
       }
         visible={modalVisible}
         onClose={handleCancel}
+        loading={loading}
         item={selectedItem}
         onSave={handleCreateOrUpdate}
         formFields={formFieldsMainCategories}

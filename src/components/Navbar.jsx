@@ -8,6 +8,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import avatar from '../data/avatar6.jpg';
 import ApiService from "../data/api_service";
 import CustomButton from "./CustomButton";
+import { useState } from "react";
 
 
 export const NavButton = ({ customFunction, icon, title, eventOnMouseEnter, eventOnMouseLeave }) => {
@@ -29,8 +30,10 @@ export const NavButton = ({ customFunction, icon, title, eventOnMouseEnter, even
 const Navbar = () => {
     const { activeMenu, setActiveMenu, setActiveMenuHover, setShowTooltip , logout } = useStateContext();
     const location = useLocation();
+    const [loading, setLoading] = useState(false);
     const apiLogout = async () => {
         try {
+            setLoading(true)
             const result = await ApiService.get({
                 subUrl: '/logout',
                 needToken: true,
@@ -40,6 +43,7 @@ const Navbar = () => {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
+        setLoading(false)
     };
     const getTitleFromPath = (path) => {
         for (let link of links) {
@@ -111,6 +115,7 @@ const Navbar = () => {
                 className='text-xl rounded-md p-2 hover:bg-primary-100 text-primary-600'
                 />
                 <CustomButton
+                loading={loading}
                 icon={<RiLogoutBoxLine />}
                 onClick={apiLogout}
                 type="botton"

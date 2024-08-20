@@ -13,6 +13,7 @@ const GeneralModal = ({
   formFields,
   title,
   formItemLayout,
+  loading,
   withFiles=true
 }) => {
   const [form] = Form.useForm();
@@ -87,7 +88,7 @@ const GeneralModal = ({
         <Button key="back" onClick={onClose}>
           إغلاق
         </Button>,
-        <Button key="submit" type="primary" onClick={handleOk}>
+        <Button loading={loading} key="submit" type="primary" onClick={handleOk}>
           حفظ
         </Button>,
       ]}

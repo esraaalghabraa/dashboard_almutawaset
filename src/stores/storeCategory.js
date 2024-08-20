@@ -12,6 +12,9 @@ export const fetchCategories = async (params) => {
 export const fetchCategoriesAsPairs = async () => {
     const result = await ApiService.get({
         subUrl: '/displayPairCategory1',
+        params: {
+            cat2: 1 
+        },
     });
     return result;
     };
