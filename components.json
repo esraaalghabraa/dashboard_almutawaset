@@ -1,4 +1,9 @@
 {
+  "name": "al-mutawasit-stores",
+  "description": "Al-Mutawasit Stores E-commerce Dashboard",
+  "productName": "Al-Mutawasit Stores",
+  "author": "Esraa <esraaalghabra3040@gmail.com>",
+  "private": true,
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "default",
   "rsc": false,
